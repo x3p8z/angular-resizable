@@ -55,9 +55,17 @@ angular.module('angularResizable', [])
                 var updateInfo = function(e) {
                     info.width = false; info.height = false;
                     if(axis === 'x')
-                        info.width = parseInt(element[0].style[scope.rFlex ? flexBasis : 'width']);
+                        // The width style element can either be a percentage or pixel value.
+                        // However, after the first resize, this value will be in pixels.
+                        // This makes it very hard to compare the beginning and end size.
+                        // Therefore, it would be better if the directive uses pixels as a
+                        // basis.
+                        //info.width = parseInt(element[0].style[scope.rFlex ? flexBasis : 'width']);
+                        info.width = scope.rFlex ? flexBasis : parseInt(element[0].offsetWidth);
                     else
-                        info.height = parseInt(element[0].style[scope.rFlex ? flexBasis : 'height']);
+                        // Same as with width
+                        //info.height = parseInt(element[0].style[scope.rFlex ? flexBasis : 'height']);
+                        info.height = scope.rFlex ? flexBasis : parseInt(element[0].offsetHeight);
                     info.id = element[0].id;
                     info.evt = e;
                 };
